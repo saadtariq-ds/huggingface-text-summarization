@@ -1,4 +1,7 @@
-from src.huggingface_text_summarization.entity import DataIngestionConfig, DataTransformationConfig
+from src.huggingface_text_summarization.entity import (
+    DataIngestionConfig, DataTransformationConfig,
+    ModelTrainerConfig
+)
 from src.huggingface_text_summarization.utils.common import read_yaml, create_directories
 from src.huggingface_text_summarization.constants import *
 
@@ -37,3 +40,26 @@ class ConfigurationManager:
         )
 
         return data_transformation_config
+    
+    def get_model_trainer_config(self) -> ModelTrainerConfig:
+        config = self.config.model_trainer
+        params = self.params.training_arguments
+
+        create_directories(path_to_directories=[config.root_directory])
+
+        model_trainer_config = ModelTrainerConfig(
+            root_directory=config.root_directory,
+            data_path=config.data_path,
+            model_ckpt=config.model_ckpt,
+            num_train_epochs=params.num_train_epochs,
+            warmup_steps=params.warmup_steps,
+            per_device_train_batch_size=params.per_device_train_batch_size,
+            weight_decay=params.weight_decay,
+            logging_steps=params.logging_steps,
+            evaluation_strategy=params.evaluation_strategy,
+            eval_steps=params.eval_steps,
+            save_steps=params.save_steps,
+            gradient_accumulation_steps=params.gradient_accumulation_steps,
+        )
+
+        return model_trainer_config
