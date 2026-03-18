@@ -1,4 +1,4 @@
-from src.huggingface_text_summarization.entity import DataIngestionConfig
+from src.huggingface_text_summarization.entity import DataIngestionConfig, DataTransformationConfig
 from src.huggingface_text_summarization.utils.common import read_yaml, create_directories
 from src.huggingface_text_summarization.constants import *
 
@@ -24,3 +24,16 @@ class ConfigurationManager:
         )
 
         return data_ingestion_config
+    
+    def get_data_transformation_config(self) -> DataTransformationConfig:
+        config = self.config.data_transformation
+
+        create_directories(path_to_directories=[config.root_directory])
+
+        data_transformation_config = DataTransformationConfig(
+            root_directory=config.root_directory,
+            data_path=config.data_path,
+            tokenizer_name=config.tokenizer_name,
+        )
+
+        return data_transformation_config
