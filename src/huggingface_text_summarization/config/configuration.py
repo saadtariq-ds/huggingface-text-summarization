@@ -1,6 +1,6 @@
 from src.huggingface_text_summarization.entity import (
     DataIngestionConfig, DataTransformationConfig,
-    ModelTrainerConfig
+    ModelTrainerConfig, ModelEvaluationConfig
 )
 from src.huggingface_text_summarization.utils.common import read_yaml, create_directories
 from src.huggingface_text_summarization.constants import *
@@ -63,3 +63,18 @@ class ConfigurationManager:
         )
 
         return model_trainer_config
+    
+    def get_model_evaluation_config(self) -> ModelEvaluationConfig:
+        config = self.config.model_evaluation
+
+        create_directories(path_to_directories=[config.root_directory])
+
+        model_evaluation_config = ModelEvaluationConfig(
+            root_directory=config.root_directory,
+            data_path=config.data_path,
+            model_path=config.model_path,
+            tokenizer_path=config.tokenizer_path,
+            metric_file_name=config.metric_file_name,
+        )
+
+        return model_evaluation_config
